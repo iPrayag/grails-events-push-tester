@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>Welcome to Grails</title>
+		<title>Async Export</title>
 		<style type="text/css" media="screen">
 			#status {
 				background-color: #eee;
@@ -83,60 +83,31 @@
 	<body>
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		
-		<button id="event-button" type="button">Click me to send an event!</button>
+		<button id="export" type="button">Async Export!</button>
 		
 		<r:script>
 		 $(function() {
-			 var grailsEvents = new grails.Events("http://localhost:8080/push-tester");
+			 var grailsEvents = new grails.Events("http://localhost:8080/push-tester"); //server
 			 
 			 var subscribed = false;
 			 
-			 $("#event-button").on("click", function() {
+			 $("#export").on("click", function() {
+			       console.log("Requesting server for data")
+
 			 	if (!subscribed) {
-			 		grailsEvents.on('savedTodo', function(data){console.log(data);}); //will listen for server events on 'savedTodo' topic
+				       grailsEvents.on('clientExportListener', function(data){
+				                                                //TODO render it in UI
+				                                                console.log(data);
+ 							                       }
+					); //will listen for server events on 'clientExportListener' topic
 			 		subscribed = true;
-			 	}
-			 	grailsEvents.send('saveTodo', {hello: "World"}); //will send data to server topic 'saveTodo'
+				}
+                                console.log("subscribed : "+subscribed)
+			 	grailsEvents.send('serverExportService', {report: "procedure"}); //will send data to server topic 'serverExportService'
 			 });
 			 
 		 });
 		</r:script>
 		
-		<div id="status" role="complementary">
-			<h1>Application Status</h1>
-			<ul>
-				<li>App version: <g:meta name="app.version"/></li>
-				<li>Grails version: <g:meta name="app.grails.version"/></li>
-				<li>Groovy version: ${org.codehaus.groovy.runtime.InvokerHelper.getVersion()}</li>
-				<li>JVM version: ${System.getProperty('java.version')}</li>
-				<li>Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</li>
-				<li>Controllers: ${grailsApplication.controllerClasses.size()}</li>
-				<li>Domains: ${grailsApplication.domainClasses.size()}</li>
-				<li>Services: ${grailsApplication.serviceClasses.size()}</li>
-				<li>Tag Libraries: ${grailsApplication.tagLibClasses.size()}</li>
-			</ul>
-			<h1>Installed Plugins</h1>
-			<ul>
-				<g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-					<li>${plugin.name} - ${plugin.version}</li>
-				</g:each>
-			</ul>
-		</div>
-		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
-
-			<div id="controller-list" role="navigation">
-				<h2>Available Controllers:</h2>
-				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
-				</ul>
-			</div>
-		</div>
 	</body>
 </html>

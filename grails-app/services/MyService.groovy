@@ -1,11 +1,11 @@
 import grails.events.Listener
 
 class MyService {
-	//will receive client events from 'saveTodo' topic
+	//will receive client events from 'serverExportService' topic
 	@Listener(namespace='browser') 
-	def saveTodo(Map data){
+	def serverExportService(Map data){
 		log.info(data)
-		data.moreData = "There we go...."
-		event('savedTodo', data, {}) // will trigger registered browsers on 'savedTodo' topic
+		data.reporting = "firstName : Prayag, lastName : Upd"
+		event('clientExportListener', data, {}) // will trigger registered browsers on 'clientExportListener' topic
 	}
 }
