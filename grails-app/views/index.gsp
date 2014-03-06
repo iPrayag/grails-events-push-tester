@@ -84,7 +84,8 @@
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		
 		<button id="export" type="button">Async Export!</button>
-		
+		<div id="dataTable"></div>
+
 		<r:script>
 		 $(function() {
 			 var grailsEvents = new grails.Events("http://localhost:8080/push-tester"); //server
@@ -97,6 +98,7 @@
 			 	if (!subscribed) {
 				       grailsEvents.on('clientExportListener', function(data){
 				                                                //TODO render it in UI
+                                                                                $('#dataTable').html(data)
 				                                                console.log(data);
  							                       }
 					); //will listen for server events on 'clientExportListener' topic
